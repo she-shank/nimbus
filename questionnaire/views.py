@@ -22,6 +22,7 @@ FOLDER_ID = settings.GOOGLE_OAUTH_SETTINGS['folder_id']
 
 def get_google_flow(request):
     """Initialize and return OAuth 2.0 Flow"""
+
     return Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE,
         scopes=SCOPES,
@@ -79,7 +80,7 @@ def get_or_create_folder(service, folder_name='campaign_data'):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
-        
+
 def oauth2callback(request):
     """Handle OAuth 2.0 callback"""
     flow = get_google_flow(request)
@@ -102,6 +103,7 @@ def questionnaire_form(request):
     """Handle the main questionnaire form"""
     # Check if user is authenticated with Google
     if 'credentials' not in request.session:
+        return
         flow = get_google_flow(request)
         authorization_url, _ = flow.authorization_url(prompt='consent')
         return redirect(authorization_url)
